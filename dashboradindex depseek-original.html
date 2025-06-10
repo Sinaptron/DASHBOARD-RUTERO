@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Rutas y Localidades</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: fixed;
+            height: 100vh;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h3 {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 15px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu .dropdown-menu {
+            padding-left: 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sidebar-menu .dropdown-menu.show {
+            max-height: 500px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: var(--header-height);
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-sidebar {
+            font-size: 20px;
+            margin-right: 20px;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        /* Content Styles */
+        .content {
+            padding: 20px;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .card-icon.primary {
+            background-color: var(--primary-color);
+        }
+
+        .card-icon.success {
+            background-color: var(--success-color);
+        }
+
+        .card-icon.warning {
+            background-color: var(--warning-color);
+        }
+
+        .card-icon.danger {
+            background-color: var(--danger-color);
+        }
+
+        .card-body h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .card-footer {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        /* Tables */
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--warning-color);
+        }
+
+        .badge-danger {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6c757d;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 10px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Rutas & Localidades</h3>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a href="#" class="active" data-section="dashboard">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="rutas">
+                            <i class="fas fa-route"></i> Rutas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="localidades">
+                            <i class="fas fa-map-marker-alt"></i> Localidades
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="galeria">
+                            <i class="fas fa-images"></i> Galería
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="ciudades">
+                            <i class="fas fa-city"></i> Ciudades
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="contacto">
+                            <i class="fas fa-envelope"></i> Contacto
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="acerca">
+                            <i class="fas fa-info-circle"></i> Acerca de
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile sidebar -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="toggle-sidebar" id="toggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <h4 id="pageTitle">Dashboard</h4>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuario">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboardSection" class="section-content active">
+                    <h2 class="page-title">Resumen General</h2>
+                    
+                    <div class="cards">
+                        <div class="card fade-in">
+                            <div class="card-header">
+                                <div class="card-title">Total de Rutas</div>
+                                <div class="card-icon primary">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h2>24</h2>
+                                <div class="card-footer">
+                                    <span class="text-success"><i class="fas fa-arrow-up"></i> 12% desde el mes pasado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card fade-in delay-1">
+                            <div class="card-header">
+                                <div class="card-title">Localidades</div>
+                                <div class="card-icon success">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h2>156</h2>
+                                <div class="card-footer">
+                                    <span class="text-success"><i class="fas fa-arrow-up"></i> 5% desde el mes pasado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card fade-in delay-2">
+                            <div class="card-header">
+                                <div class="card-title">Ciudades</div>
+                                <div class="card-icon warning">
+                                    <i class="fas fa-city"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h2>18</h2>
+                                <div class="card-footer">
+                                    <span class="text-danger"><i class="fas fa-arrow-down"></i> 2% desde el mes pasado</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card fade-in delay-3">
+                            <div class="card-header">
+                                <div class="card-title">Usuarios</div>
+                                <div class="card-icon danger">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h2>1,254</h2>
+                                <div class="card-footer">
+                                    <span class="text-success"><i class="fas fa-arrow-up"></i> 8% desde el mes pasado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container fade-in">
+                        <h3>Rutas Recientes</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                    <th>Distancia</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>R001</td>
+                                    <td>Ruta Costera</td>
+                                    <td>Valparaíso</td>
+                                    <td>Viña del Mar</td>
+                                    <td>12 km</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>R002</td>
+                                    <td>Ruta de la Montaña</td>
+                                    <td>Santiago</td>
+                                    <td>Farellones</td>
+                                    <td>45 km</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>R003</td>
+                                    <td>Ruta del Desierto</td>
+                                    <td>Antofagasta</td>
+                                    <td>San Pedro de Atacama</td>
+                                    <td>110 km</td>
+                                    <td><span class="badge badge-warning">Mantención</span></td>
+                                </tr>
+                                <tr>
+                                    <td>R004</td>
+                                    <td>Ruta de los Lagos</td>
+                                    <td>Puerto Montt</td>
+                                    <td>Puerto Varas</td>
+                                    <td>25 km</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>R005</td>
+                                    <td>Ruta Austral</td>
+                                    <td>Coyhaique</td>
+                                    <td>Puerto Aysén</td>
+                                    <td>65 km</td>
+                                    <td><span class="badge badge-danger">Cerrada</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Rutas Section -->
+                <section id="rutasSection" class="section-content">
+                    <h2 class="page-title">Gestión de Rutas</h2>
+                    
+                    <div class="table-container fade-in">
+                        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Todas las Rutas</h3>
+                            <button class="btn btn-primary" id="addRouteBtn">
+                                <i class="fas fa-plus"></i> Agregar Ruta
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                    <th>Distancia</th>
+                                    <th>Duración</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>R001</td>
+                                    <td>Ruta Costera</td>
+                                    <td>Valparaíso</td>
+                                    <td>Viña del Mar</td>
+                                    <td>12 km</td>
+                                    <td>25 min</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R002</td>
+                                    <td>Ruta de la Montaña</td>
+                                    <td>Santiago</td>
+                                    <td>Farellones</td>
+                                    <td>45 km</td>
+                                    <td>1 h 15 min</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R003</td>
+                                    <td>Ruta del Desierto</td>
+                                    <td>Antofagasta</td>
+                                    <td>San Pedro de Atacama</td>
+                                    <td>110 km</td>
+                                    <td>1 h 45 min</td>
+                                    <td><span class="badge badge-warning">Mantención</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R004</td>
+                                    <td>Ruta de los Lagos</td>
+                                    <td>Puerto Montt</td>
+                                    <td>Puerto Varas</td>
+                                    <td>25 km</td>
+                                    <td>35 min</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R005</td>
+                                    <td>Ruta Austral</td>
+                                    <td>Coyhaique</td>
+                                    <td>Puerto Aysén</td>
+                                    <td>65 km</td>
+                                    <td>55 min</td>
+                                    <td><span class="badge badge-danger">Cerrada</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>R006</td>
+                                    <td>Ruta del Vino</td>
+                                    <td>Rancagua</td>
+                                    <td>Santa Cruz</td>
+                                    <td>85 km</td>
+                                    <td>1 h 10 min</td>
+                                    <td><span class="badge badge-success">Activa</span></td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Localidades Section -->
+                <section id="localidadesSection" class="section-content">
+                    <h2 class="page-title">Gestión de Localidades</h2>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="todas">Todas</div>
+                        <div class="tab" data-tab="ciudades">Por Ciudad</div>
+                        <div class="tab" data-tab="rutas">Por Ruta</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="todasTab">
+                        <div class="table-container fade-in">
+                            <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3>Todas las Localidades</h3>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Agregar Localidad
+                                </button>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Ciudad</th>
+                                        <th>Rutas</th>
+                                        <th>Población</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>L001</td>
+                                        <td>Playa Ancha</td>
+                                        <td>Valparaíso</td>
+                                        <td>Ruta Costera</td>
+                                        <td>45,200</td>
+                                        <td>
+                                            <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                            <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>L002</td>
+                                        <td>Cerro Alegre</td>
+                                        <td>Valparaíso</td>
+                                        <td>Ruta Costera</td>
+                                        <td>12,500</td>
+                                        <td>
+                                            <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                            <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>L003</td>
+                                        <td>Las Condes</td>
+                                        <td>Santiago</td>
+                                        <td>Ruta de la Montaña</td>
+                                        <td>249,800</td>
+                                        <td>
+                                            <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                            <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>L004</td>
+                                        <td>San Pedro de Atacama</td>
+                                        <td>Antofagasta</td>
+                                        <td>Ruta del Desierto</td>
+                                        <td>5,400</td>
+                                        <td>
+                                            <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                            <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>L005</td>
+                                        <td>Puerto Varas</td>
+                                        <td>Puerto Montt</td>
+                                        <td>Ruta de los Lagos</td>
+                                        <td>42,300</td>
+                                        <td>
+                                            <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                            <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="ciudadesTab">
+                        <div class="table-container fade-in">
+                            <h3>Localidades por Ciudad</h3>
+                            <p>Seleccione una ciudad para ver sus localidades</p>
+                            <!-- Contenido dinámico se cargaría aquí -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="rutasTab">
+                        <div class="table-container fade-in">
+                            <h3>Localidades por Ruta</h3>
+                            <p>Seleccione una ruta para ver sus localidades</p>
+                            <!-- Contenido dinámico se cargaría aquí -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Galería Section -->
+                <section id="galeriaSection" class="section-content">
+                    <h2 class="page-title">Galería de Rutas</h2>
+                    
+                    <div class="gallery">
+                        <div class="gallery-item fade-in">
+                            <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta Costera">
+                            <div class="gallery-caption">Ruta Costera - Valparaíso a Viña del Mar</div>
+                        </div>
+                        <div class="gallery-item fade-in delay-1">
+                            <img src="https://images.unsplash.com/photo-1518632617565-d1a82f68a1c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta de la Montaña">
+                            <div class="gallery-caption">Ruta de la Montaña - Santiago a Farellones</div>
+                        </div>
+                        <div class="gallery-item fade-in delay-2">
+                            <img src="https://images.unsplash.com/photo-1517825738774-7de9363ef735?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta del Desierto">
+                            <div class="gallery-caption">Ruta del Desierto - Antofagasta a San Pedro</div>
+                        </div>
+                        <div class="gallery-item fade-in delay-3">
+                            <img src="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta de los Lagos">
+                            <div class="gallery-caption">Ruta de los Lagos - Puerto Montt a Puerto Varas</div>
+                        </div>
+                        <div class="gallery-item fade-in">
+                            <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta Austral">
+                            <div class="gallery-caption">Ruta Austral - Coyhaique a Puerto Aysén</div>
+                        </div>
+                        <div class="gallery-item fade-in delay-1">
+                            <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ruta del Vino">
+                            <div class="gallery-caption">Ruta del Vino - Rancagua a Santa Cruz</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ciudades Section -->
+                <section id="ciudadesSection" class="section-content">
+                    <h2 class="page-title">Ciudades Disponibles</h2>
+                    
+                    <div class="table-container fade-in">
+                        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Listado de Ciudades</h3>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar Ciudad
+                            </button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Región</th>
+                                    <th>Rutas</th>
+                                    <th>Localidades</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>C001</td>
+                                    <td>Valparaíso</td>
+                                    <td>Valparaíso</td>
+                                    <td>3</td>
+                                    <td>12</td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C002</td>
+                                    <td>Santiago</td>
+                                    <td>Metropolitana</td>
+                                    <td>5</td>
+                                    <td>32</td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C003</td>
+                                    <td>Antofagasta</td>
+                                    <td>Antofagasta</td>
+                                    <td>2</td>
+                                    <td>8</td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C004</td>
+                                    <td>Puerto Montt</td>
+                                    <td>Los Lagos</td>
+                                    <td>4</td>
+                                    <td>15</td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>C005</td>
+                                    <td>Coyhaique</td>
+                                    <td>Aysén</td>
+                                    <td>2</td>
+                                    <td>6</td>
+                                    <td>
+                                        <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
+                                        <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Contacto Section -->
+                <section id="contactoSection" class="section-content">
+                    <h2 class="page-title">Contacto</h2>
+                    
+                    <div class="cards">
+                        <div class="card fade-in">
+                            <div class="card-header">
+                                <div class="card-title">Información de Contacto</div>
+                                <div class="card-icon primary">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p><i class="fas fa-envelope mr-2"></i> contacto@rutasylocalidades.cl</p>
+                                <p><i class="fas fa-phone mr-2"></i> +56 9 1234 5678</p>
+                                <p><i class="fas fa-map-marker-alt mr-2"></i> Av. Principal 123, Santiago, Chile</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card fade-in delay-1" style="grid-column: span 2;">
+                            <div class="card-header">
+                                <div class="card-title">Formulario de Contacto</div>
+                                <div class="card-icon success">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="name">Nombre</label>
+                                        <input type="text" id="name" class="form-control" placeholder="Ingrese su nombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" class="form-control" placeholder="Ingrese su email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="subject">Asunto</label>
+                                        <input type="text" id="subject" class="form-control" placeholder="Ingrese el asunto">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message">Mensaje</label>
+                                        <textarea id="message" class="form-control" rows="4" placeholder="Ingrese su mensaje"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Acerca de Section -->
+                <section id="acercaSection" class="section-content">
+                    <h2 class="page-title">Acerca de</h2>
+                    
+                    <div class="card fade-in">
+                        <div class="card-header">
+                            <div class="card-title">Sobre Nosotros</div>
+                            <div class="card-icon primary">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3>Rutas y Localidades</h3>
+                            <p>Somos una plataforma dedicada a proporcionar información detallada sobre rutas, localidades y ciudades en Chile. Nuestro objetivo es facilitar el acceso a datos relevantes para viajeros, turistas y residentes.</p>
+                            
+                            <h4 class="mt-4">Nuestra Misión</h4>
+                            <p>Proporcionar información precisa y actualizada sobre las rutas y localidades de Chile, mejorando la experiencia de viaje y facilitando la planificación de rutas.</p>
+                            
+                            <h4 class="mt-4">Nuestro Equipo</h4>
+                            <p>Contamos con un equipo de profesionales dedicados a recopilar y verificar la información para garantizar su precisión y utilidad.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Route Modal -->
+    <div class="modal" id="addRouteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Nueva Ruta</h5>
+                <button class="close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="routeForm">
+                    <div class="form-group">
+                        <label for="routeName">Nombre de la Ruta</label>
+                        <input type="text" id="routeName" class="form-control" placeholder="Ej: Ruta Costera" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="routeOrigin">Origen</label>
+                        <select id="routeOrigin" class="form-control" required>
+                            <option value="">Seleccione origen</option>
+                            <option value="Valparaíso">Valparaíso</option>
+                            <option value="Santiago">Santiago</option>
+                            <option value="Antofagasta">Antofagasta</option>
+                            <option value="Puerto Montt">Puerto Montt</option>
+                            <option value="Coyhaique">Coyhaique</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="routeDestination">Destino</label>
+                        <select id="routeDestination" class="form-control" required>
+                            <option value="">Seleccione destino</option>
+                            <option value="Viña del Mar">Viña del Mar</option>
+                            <option value="Farellones">Farellones</option>
+                            <option value="San Pedro de Atacama">San Pedro de Atacama</option>
+                            <option value="Puerto Varas">Puerto Varas</option>
+                            <option value="Puerto Aysén">Puerto Aysén</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="routeDistance">Distancia (km)</label>
+                        <input type="number" id="routeDistance" class="form-control" placeholder="Ej: 120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="routeDuration">Duración aproximada</label>
+                        <input type="text" id="routeDuration" class="form-control" placeholder="Ej: 2 horas 30 minutos">
+                    </div>
+                    <div class="form-group">
+                        <label for="routeStatus">Estado</label>
+                        <select id="routeStatus" class="form-control" required>
+                            <option value="Activa">Activa</option>
+                            <option value="Mantención">Mantención</option>
+                            <option value="Cerrada">Cerrada</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveRoute">Guardar Ruta</button>
+                <button class="btn" id="cancelRoute">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle sidebar on mobile
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            toggleSidebar.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                sidebarOverlay.classList.toggle('show');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            });
+            
+            // Navigation between sections
+            const navLinks = document.querySelectorAll('.sidebar-menu a');
+            const sections = document.querySelectorAll('.section-content');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section') + 'Section';
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // Update page title
+                    pageTitle.textContent = this.textContent.trim();
+                    
+                    // Close sidebar on mobile
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                });
+            });
+            
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(tabId + 'Tab').classList.add('active');
+                });
+            });
+            
+            // Modal functionality
+            const addRouteBtn = document.getElementById('addRouteBtn');
+            const addRouteModal = document.getElementById('addRouteModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelRoute = document.getElementById('cancelRoute');
+            
+            addRouteBtn.addEventListener('click', function() {
+                addRouteModal.classList.add('show');
+            });
+            
+            closeModal.addEventListener('click', function() {
+                addRouteModal.classList.remove('show');
+            });
+            
+            cancelRoute.addEventListener('click', function() {
+                addRouteModal.classList.remove('show');
+            });
+            
+            // Save route
+            const saveRoute = document.getElementById('saveRoute');
+            const routeForm = document.getElementById('routeForm');
+            
+            saveRoute.addEventListener('click', function() {
+                if (routeForm.checkValidity()) {
+                    // Here you would typically send the data to a server
+                    alert('Ruta guardada exitosamente!');
+                    addRouteModal.classList.remove('show');
+                    routeForm.reset();
+                } else {
+                    routeForm.reportValidity();
+                }
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === addRouteModal) {
+                    addRouteModal.classList.remove('show');
+                }
+            });
+            
+            // Animation on scroll
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.fade-in');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on page load
+        });
+    </script>
+</body>
+</html>

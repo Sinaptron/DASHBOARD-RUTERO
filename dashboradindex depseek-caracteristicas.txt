@@ -1,0 +1,39 @@
+github
+
+
+# Dashboard de Rutas y Localidades - Código HTML, CSS y JavaScript
+Aquí te proporciono un código completo para un dashboard responsivo con buena UI/UX que muestra información de rutas, localidades y más:
+
+ ## Características principales del dashboard:
+
+1. **Diseño responsivo** que se adapta a diferentes tamaños de pantalla
+2. **Interfaz moderna** con buen uso de colores y espacios
+3. **Menú lateral** colapsable para dispositivos móviles
+4. **Secciones organizadas**:
+   - Dashboard con resumen estadístico
+   - Gestión de rutas
+   - Gestión de localidades
+   - Galería de fotos de rutas
+   - Ciudades disponibles
+   - Formulario de contacto
+   - Acerca de la plataforma
+
+5. **Elementos UI/UX mejorados**:
+   - Tarjetas informativas con iconos
+   - Tablas con acciones
+   - Pestañas para organizar contenido
+   - Modal para agregar nuevas rutas
+   - Animaciones sutiles
+   - Feedback visual al interactuar
+
+6. **Funcionalidades JavaScript**:
+   - Navegación entre secciones
+   - Gestión de pestañas
+   - Apertura/cierre de modal
+   - Validación de formularios
+   - Animaciones al hacer scroll
+
+El código está completamente autónomo (no requiere dependencias externas más allá de Font Awesome para los iconos) y puede copiarse directamente a un archivo HTML para probarlo.
+
+
+
