@@ -556,3 +556,178 @@
             display: block;
         }
     
+/* ===============================================
+ 🔹 BOTON FLOTANTE DE MIS SERVICIOS
+============================================== */
+ .floating-btn {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, #2c5aa0, #4a90e2);
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      z-index: 1000;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .floating-btn:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+ /* Tooltip */
+.floating-btn::after {
+  content: "Páginas Web Modernas y Responsivas, Contactame !!!";
+  position: absolute;
+  bottom: -60px; /* debajo del botón */
+  /* left: 50%; */
+  transform: translateX(-50%);
+  background: #2c5aa0;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1001;
+}
+
+  .floating-btn:hover::after {
+      opacity: 1;
+    } 
+.floating-btn:hover:not(.hide-tooltip)::after {
+  opacity: 1;
+   animation: bounce 1s infinite;
+}
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+/* RESPONSIVE: móvil real */
+@media (max-width: 480px) {
+  .floating-btn::after {
+    font-size: 1rem;
+    padding: 8px 10px;
+    bottom: -70px;
+    max-width: 240px;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+    /* Opciones desplegables */
+    .floating-options {
+      position: fixed;
+      top: calc(50% - 65px);
+      right: 90px;
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 999;
+    }
+
+    .floating-options.show {
+      display: flex;
+    }
+
+    .option-btn {
+      background: white;
+      color: #2c5aa0;
+      border-radius: 30px;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn:hover {
+      background: #4a90e2;
+      color: white;
+      transform: translateX(-5px);
+    }
+
+    @media (max-width: 480px) {
+      .floating-btn {
+        width: 50px;
+        height: 50px;       
+      }
+
+      .option-btn {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+
+      /* .floating-btn::after {
+        display: none;
+      } */
+    }
+
+/* Media queries para pantallas móviles */
+@media (max-width: 768px) {
+  .floating-btn::after {
+    content: "Páginas Web Modernas ¡Contactame!";
+    bottom: -90px; /* debajo del botón */
+    /* Reducir el tamaño de fuente */
+    font-size: 0.8rem;
+    
+    /* Ajustar padding para pantallas pequeñas */
+    padding: 6px 8px;
+    
+    /* Permitir que el texto se divida en múltiples líneas */
+    white-space: normal;
+    
+    /* Establecer un ancho máximo */
+    max-width: 200px;
+    
+    /* Centrar el texto */
+    text-align: center;
+    
+    /* Ajustar posición para que no se salga de la pantalla */
+    right: 10px;
+    left: auto;
+    transform: none;
+    
+    /* Reducir sombra para mejor rendimiento en móvil */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-btn::after {
+        content: "Web Modernas ¡Contacto!";
+         bottom: -60px; /* debajo del botón */
+    /* Fuente aún más pequeña para pantallas muy pequeñas */
+    font-size: 0.7rem;
+    
+    /* Padding más compacto */
+    padding: 5px 6px;
+    
+    /* Ancho máximo más pequeño */
+    max-width: 150px;
+    
+    /* Posición más ajustada */
+    right: 5px;
+    
+    /* Altura de línea para mejor legibilidad */
+    line-height: 1.2;
+  }
+}
