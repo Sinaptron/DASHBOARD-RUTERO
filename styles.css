@@ -232,7 +232,43 @@
 
 
 
+ .card .card-header .contactitle{ 
+    /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; */
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e40af;
+    text-align: center;
+    margin: 0;
+    /* padding: 40px 30px 20px; */
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    letter-spacing: -0.025em;
+    /* position: relative; */
+}
+/* Texto descriptivo */
 
+.card-body .contact {
+    /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; */
+    font-size: 1rem;
+    font-weight: 500;
+    color: #475569;
+    /* text-align: center; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    margin-top: 25px;
+    /* padding: 10px; */
+ 
+    /* background: rgba(59, 130, 246, 0.05); */
+    /* border: 1px solid rgba(59, 130, 246, 0.1); */
+    /* border-radius: 12px; */
+    /* text-transform: capitalize; */
+    /* letter-spacing: 0.01em; */
+    /* position: relative; */
+    overflow: hidden;
+}
 
 
 
@@ -369,7 +405,9 @@ thead {
 
 
 
-
+/* ===============================================
+ 🔹 GALERIA
+============================================== */
 
         /* Gallery */
         .gallery {
@@ -455,7 +493,21 @@ thead {
             background-color: var(--secondary-color);
         }
 
-        /* Modal */
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===============================================
+ 🔹   MODAL
+============================================== */
         .modal {
             display: none;
             position: fixed;
@@ -467,6 +519,9 @@ thead {
             z-index: 1000;
             justify-content: center;
             align-items: center;
+
+          /* animation: modalFadeIn 0.3s; */
+
         }
 
         .modal.show {
@@ -482,7 +537,44 @@ thead {
             overflow-y: auto;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             animation: modalFadeIn 0.3s;
+    /* position: relative; */
+    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    margin: 5% auto;  
+    /* padding: 0; */
+    border: none;
+    /* border-radius: 20px; */
+    /* width: 90%; */
+    max-width: 700px;
+    max-height: 85vh;
+    /* overflow: hidden; */
+    box-shadow: 
+        0 25px 60px rgba(13, 110, 253, 0.2),
+        0 10px 30px rgba(59, 130, 246, 0.15),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+    animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
         }
+
+
+/* Header del modal con gradiente azul */
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, 
+        #1e40af 0%, 
+        #3b82f6 25%, 
+        #60a5fa 50%, 
+        #3b82f6 75%, 
+        #1e40af 100%);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+
 
         @keyframes modalFadeIn {
             from {
@@ -509,14 +601,7 @@ thead {
             margin: 0;
         }
 
-        .close {
-            font-size: 24px;
-            font-weight: bold;
-            color: #6c757d;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
+       
 
         .modal-body {
             padding: 20px;
@@ -527,7 +612,295 @@ thead {
             border-top: 1px solid #e9ecef;
             display: flex;
             justify-content: flex-end;
+        } 
+
+ .close {
+            /* font-size: 24px; */
+            font-weight: bold;
+            /* color: #6c757d; */
+            cursor: pointer;
+            border: none;
+            background: none;
+               /* position: absolute; */
+    /* top: 10px; */
+    /* right: 20px; */
+    color: #2600ff;
+    font-size: 32px;
+    /* font-weight: 300; */
+    /* cursor: pointer; */
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 8, 255, 0.779);
         }
+
+.close:hover,
+.close:focus {
+    color: #2200ff;
+    background: rgba(254, 242, 242, 0.9);
+    border-color: rgba(68, 125, 239, 0.829);
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 25px rgba(0, 94, 255, 0.15);
+}
+
+/* Título principal */
+.modal-content h2 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e40af;
+    text-align: center;
+    margin: 0;
+    padding: 40px 30px 20px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    letter-spacing: -0.025em;
+    /* position: relative; */
+}
+/* Texto descriptivo */
+
+.modal-content p {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #475569;
+    text-align: center;
+    margin: 0 7px 7px;
+    padding: 5px 5px;
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    border-radius: 12px;
+    text-transform: capitalize;
+    letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
+}
+/* Contenedor de imagen */
+.img {
+    padding: 0 30px 40px;
+    text-align: center;
+    position: relative;
+}
+
+/* Imagen del mapa */
+.img img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 
+        0 20px 40px rgba(59, 130, 246, 0.15),
+        0 8px 16px rgba(30, 64, 175, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid rgba(59, 130, 246, 0.1);
+    position: relative;
+    background: #f8faff;
+}
+/* Efectos hover en la imagen */
+.img img:hover {
+    transform: scale(1.02);
+    box-shadow: 
+        0 25px 50px rgba(59, 130, 246, 0.2),
+        0 12px 24px rgba(30, 64, 175, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+/* Marco decorativo para la imagen */
+.img::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 45px;
+    right: 45px;
+    bottom: 55px;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6);
+    background-size: 300% 300%;
+    animation: borderGlow 4s ease-in-out infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 3% auto;
+        max-height: 90vh;
+        border-radius: 16px;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.6rem;
+        padding: 35px 20px 15px;
+    }
+    
+    .modal-content p {
+        font-size: 1rem;
+        margin: 0 5px 5px;
+        padding: 5px 5px;
+    }
+    
+    .img {
+        padding: 0 20px 30px;
+    }
+    
+    .img::before {
+        left: 35px;
+        right: 35px;
+        bottom: 45px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 98%;
+        margin: 2% auto;
+        border-radius: 12px;
+        max-height: 95vh;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.4rem;
+        padding: 30px 15px 12px;
+        line-height: 1.3;
+    }
+    
+    .modal-content h2::after {
+        width: 60px;
+        height: 2px;
+    }
+    
+    .modal-content p {
+        font-size: 0.95rem;
+        margin: 0 15px 20px;
+        padding: 10px 15px;
+    }
+    
+    .img {
+        padding: 0 15px 25px;
+    }
+    
+    .img::before {
+        left: 25px;
+        right: 25px;
+        bottom: 35px;
+    }
+    
+    .close {
+        top: 12px;
+        right: 15px;
+        font-size: 28px;
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* ===== ESTADOS DE CARGA ===== */
+
+.modal.show {
+    display: block;
+}
+
+.modal-content.loading {
+    opacity: 0.7;
+}
+
+.modal-content.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(59, 130, 246, 0.2);
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ===== MEJORAS DE ACCESIBILIDAD ===== */
+
+.modal:focus {
+    outline: none;
+}
+
+.close:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Reducir animaciones para usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .modal-content,
+    .close,
+    .img img,
+    .modal-content::before,
+    .modal-content h2::after,
+    .modal-content p::before,
+    .img::before {
+        animation: none;
+        transition: none;
+    }
+    
+    .close:hover {
+        transform: scale(1.05);
+    }
+    
+    .img img:hover {
+        transform: scale(1.01);
+    }
+}
+
+/* FINALIZA CODIGO MODAL */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
 
         /* Responsive Styles */
         @media (max-width: 992px) {
@@ -639,6 +1012,7 @@ thead {
             display: block;
         }
     
+
 /* ===============================================
  🔹 BOTON FLOTANTE DE MIS SERVICIOS
 ============================================== */
