@@ -1,4 +1,7 @@
-        document.addEventListener('DOMContentLoaded', function() {
+// ===================================================
+// 	 🔹   DASHBOARD
+// ===================================================
+document.addEventListener('DOMContentLoaded', function() {
             // Toggle sidebar on mobile
             const toggleSidebar = document.getElementById('toggleSidebar');
             const sidebar = document.getElementById('sidebar');
@@ -14,7 +17,11 @@
                 sidebarOverlay.classList.remove('show');
             });
             
-            // Navigation between sections
+
+// ===================================================
+// 	 🔹 Navegacion entre secciones dentro de la pagina
+// ===================================================
+            
             const navLinks = document.querySelectorAll('.sidebar-menu a');
             const sections = document.querySelectorAll('.section-content');
             const pageTitle = document.getElementById('pageTitle');
@@ -47,135 +54,8 @@
                 });
             });
             
-            // Tab functionality
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(tabId + 'Tab').classList.add('active');
-                });
-            });
-            
 
-
-
-
-
-
-
-
-
-      // FRAGMENTO DE ABAJO ES PARA AÑADIR activa el formulario ? para agregar datos de rutas
-            // Modal functionality
-            // const addRouteBtn = document.getElementById('addRouteBtn');
-            // const addRouteModal = document.getElementById('addRouteModal');
-            // const closeModal = document.getElementById('closeModal');
-            // const cancelRoute = document.getElementById('cancelRoute');
-            
-            // addRouteBtn.addEventListener('click', function() {
-            //     addRouteModal.classList.add('show');
-            // });
-            
-            // closeModal.addEventListener('click', function() {
-            //     addRouteModal.classList.remove('show');
-            // });
-            
-            // cancelRoute.addEventListener('click', function() {
-            //     addRouteModal.classList.remove('show');
-            // });
-            
-
-// GUARDANDO RUTA
-// Siguiente fragmento es informativo, desactivarlo cuando ya se active fragmento de abajo para poder gurdar informacion
-const addRouteBtn = document.getElementById('addRouteBtn');
-addRouteBtn.addEventListener('click', () => {
-  alert('No tiene autorizacion para agregar Informacion !!!');
-});
-
-// FRAGMENTO DE ABAJO ES PARA AÑADIR  REGISTRO de rutas (COMENTAR EL DE ARRIBA)
-            // const saveRoute = document.getElementById('saveRoute');
-            // const routeForm = document.getElementById('routeForm');
-            
-            // saveRoute.addEventListener('click', function() {
-            //     if (routeForm.checkValidity()) {
-
-// const nombre = document.getElementById('routeName').value;
-// const origen = document.getElementById('routeOrigin').value;
-// const destino = document.getElementById('routeDestination').value;
-// const distancia = document.getElementById('routeDistance').value + ' km';
-// const duracion = document.getElementById('routeDuration').value;
-// const estado = document.getElementById('routeStatus').value;
-
-// const tabla = document.querySelector('#rutasSection table tbody');
-// const nuevaFila = document.createElement('tr');
-
-// const nuevoId = 'R' + String(tabla.children.length + 1).padStart(3, '0');
-
-// nuevaFila.innerHTML = `
-//   <td>${nuevoId}</td>
-//   <td>${nombre}</td>
-//   <td>${origen}</td>
-//   <td>${destino}</td>
-//   <td>${distancia}</td>
-//   <td>${duracion}</td>
-//   <td><span class="badge badge-success">${estado}</span></td>
-//   <td>
-//     <button class="btn-icon"><i class="fas fa-edit text-primary"></i></button>
-//     <button class="btn-icon"><i class="fas fa-trash text-danger"></i></button>
-//   </td>
-// `;
-
-// tabla.appendChild(nuevaFila);
-// FRAGMENTO DE ARRIBA ES PARA AÑADIR REGISTRO de rutas
-
-//descomentar fragmento de abajo para que funcione el script de arriba
-                //     alert('Ruta guardada exitosamente!');
-                //     addRouteModal.classList.remove('show');
-                //     routeForm.reset();
-                // } else {
-                //     routeForm.reportValidity();
-                // }
-            // });
-            
-//FINALIZA CODIGO DE GUARDADO DE RUTAS
-
-
-
-
-
-
-
-
-
-
-//añadir localidades
-const addLocalidadBtn = document.getElementById('addLocalidadBtn');
-addLocalidadBtn.addEventListener('click', () => {
-  alert('No tiene autorizacion para agregar Informacion !!!');
-});
-// Función para agregar localidad aún no implementada.
-
-//añadir ciudades
-const addEstadoBtn = document.getElementById('addEstadoBtn');
-addEstadoBtn.addEventListener('click', () => {
-  alert('No tiene autorizacion para agregar Informacion !!!.');
-});
-// Función para agregar localidad aún no implementada.
-
-
-
-
-
-            // Close modal when clicking outside
+    // CIERRA MODAL AL HACER CLICK EN CUALQUIER PARTE
             window.addEventListener('click', function(e) {
                 if (e.target === addRouteModal) {
                     addRouteModal.classList.remove('show');
@@ -201,7 +81,6 @@ addEstadoBtn.addEventListener('click', () => {
             animateOnScroll(); // Run once on page load
         });
     
-
 // ============================================
 // 	 🔹 BOTON FLOTANTE DE MIS SERVICIOS
 // ============================================
@@ -218,3 +97,61 @@ addEstadoBtn.addEventListener('click', () => {
       }
     });
 
+
+
+
+
+
+
+
+
+
+
+
+    
+// Obtener los elementos del modal y el botón
+//NOTA: primera opcion para boton modal
+
+document.addEventListener("DOMContentLoaded", function () {
+  const openButtons = document.querySelectorAll(".openModalBtn");
+  const modals = document.querySelectorAll(".modal");
+  const closeButtons = document.querySelectorAll(".close");
+
+  openButtons.forEach((button, index) => {
+    button.addEventListener("click", function () {
+      modals[index].style.display = "block";
+    });
+  });
+
+  closeButtons.forEach((close, index) => {
+    close.addEventListener("click", function () {
+      modals[index].style.display = "none";
+    });
+  });
+
+  window.addEventListener("click", function (event) {
+    modals.forEach((modal) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+});
+
+
+//NOTA: segunda opcion para boton modal
+// JavaScript básico para abrir/cerrar el modal
+// document.querySelector(".openModalBtn").onclick = function () {
+//   document.querySelector(".modal").style.display = "flex";
+// };
+
+// document.querySelector(".close").onclick = function () {
+//   document.querySelector(".modal").style.display = "none";
+// };
+
+// // Cerrar si se da clic fuera del contenido
+// window.onclick = function (e) {
+//   if (e.target.classList.contains("modal")) {
+//     document.querySelector(".modal").style.display = "none";
+//   }
+// };

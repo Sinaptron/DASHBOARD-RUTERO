@@ -1,0 +1,182 @@
+github
+
+
+# Dashboard de Rutas y Localidades - Código HTML, CSS y JavaScript
+Aquí te proporciono un código completo para un dashboard responsivo con buena UI/UX que muestra información de rutas, localidades y más:
+
+ ## Características principales del dashboard:
+
+1. **Diseño responsivo** que se adapta a diferentes tamaños de pantalla
+2. **Interfaz moderna** con buen uso de colores y espacios
+3. **Menú lateral** colapsable para dispositivos móviles
+4. **Secciones organizadas**:
+   - Dashboard con resumen estadístico
+   - Gestión de rutas
+   - Gestión de localidades
+   - Galería de fotos de rutas
+   - Ciudades disponibles
+   - Formulario de contacto
+   - Acerca de la plataforma
+
+5. **Elementos UI/UX mejorados**:
+   - Tarjetas informativas con iconos
+   - Tablas con acciones
+   - Pestañas para organizar contenido
+   - Modal para agregar nuevas rutas
+   - Animaciones sutiles
+   - Feedback visual al interactuar
+
+6. **Funcionalidades JavaScript**:
+   - Navegación entre secciones
+   - Gestión de pestañas
+   - Apertura/cierre de modal
+   - Validación de formularios
+   - Animaciones al hacer scroll
+
+El código está completamente autónomo (no requiere dependencias externas más allá de Font Awesome para los iconos) y puede copiarse directamente a un archivo HTML para probarlo.
+
+
+
+CODIGO DE MODAL
+<!-- Tarjeta 1 -->
+
+            <div class="card" data-category="legal">
+              <div class="img">
+                <img src="images/fotojuridico.png" loading="lazy" alt="" />
+              </div>
+              <div class="content">
+                <div class="text">
+                  <h3>Unico Pago $ 99.00 mxn</h3>
+                  <span>Actas, Contratos, Demandas, Juicios...</span>
+                </div>
+                <button class="openModalBtn">Mas Información</button>
+              </div>
+            </div>
+
+
+            <!-- Modal 1 -->
+            <div class="modal">
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>PAQUETE KIT JURIDICO</h2>
+                <br />
+                    ⚖️ Un producto digital para abogados que necesitan apoyo en la
+                  redacción de formatos jurídicos debe transmitir practicidad,
+                  seguridad legal, ahorro de tiempo y profesionalismo
+                </p>
+
+                <br />
+                <p>📚 15000 mil formatos editables/ Word sobre :</p>
+                <p>⚖️ Actas de asamblea</p>
+                <p>⚖️ Modelos de certificado</p>
+                <p>⚖️ Modelos contestación</p>
+                <p>⚖️ Modelos de declaración</p>
+                <p>
+
+                <br />
+                <p>ARCHIVOS DIGITALES LISTOS PARA DESCARGAR E IMPRIMIR</p>
+                <p>
+                  Pagas pouedas ab veces que quieras</p>
+
+                <p>✅ TU PAGO LO PUEDES HACER POR:</p>
+                <p>💳 DEPOSITO BANCARIO.</p>
+
+                <br />
+
+                <p>
+                  ¡¡¡Invierte en tu conocimiento, prepárate y sal a triunfar !!!
+                </p>  
+
+                <div class="BotonMod-sw"><p>Empieza YA.</p></div>
+              </div>
+            </div>
+FIN DE CODIGO MODAL
+
+
+.openModalBtn {
+	padding: 10px 20px;
+	font-size: 16px;
+	color: rgb(6, 3, 57);
+	background-color: rgb(47, 241, 95);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: 0 5px 15px var(--link-a);	
+	transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .openModalBtn:hover {
+	color: yellow;
+	background-color: gray;
+	box-shadow: 0 5px 15px var(--color-hover);
+	transform: scale(1.05);
+  }
+
+    /* ======================================================
+	 🔹 MODALES (Ventanas emergentes)
+	 ====================================================== */
+  
+  .modal {
+	display: none;
+	/* El modal está oculto por defecto */
+	position: fixed;
+	z-index: 1;
+	/* Asegura que el modal esté encima de otros elementos */
+	left: 15%;
+	top: 0;
+	/* width: 50%; */
+	height: 80%;
+	background-color: rgb(111, 118, 111);
+	/* Fondo semitransparente */
+	overflow: auto;
+	transition: opacity 0.5s ease-in-out;
+	/* Transición suave */
+  }
+  
+ 
+  /* Estilos del contenido del modal */
+  
+  .modal-content {
+	background-color: var(--color-fondo);
+	margin: 15% auto;
+	/* Centra el modal en la pantalla */
+	padding: 25px;
+	border-radius: 15px;
+	width: 85%;
+	max-width: 600px;
+	box-shadow: 0px 5px 15px var(--color-secundario);
+	animation: slideIn 0.5s ease-out;
+	position: relative;
+  }
+  
+  /* Animación de entrada */
+  
+  @keyframes slideIn {
+	from {
+	  transform: translateY(-100%);
+	  opacity: 0;
+	}
+	to {
+	  transform: translateY(0);
+	  opacity: 1;
+	}
+  }
+  
+  /* Estilo del botón de cierre */
+  
+  .close {
+	color: white;
+	font-size: 40px;
+	font-weight: bold;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	cursor: pointer;
+  }
+  
+  .close:hover,
+  .close:focus {
+	color: rgb(252, 16, 48);
+	text-decoration: none;
+	cursor: pointer;
+  }
