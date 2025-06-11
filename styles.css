@@ -824,7 +824,7 @@ thead {
 
   /* Botón para abrir el modal */
   .openModalBtn {
-	padding: 10px 20px;
+	padding: 5px 30px;
 	font-size: 16px;
 	color: rgb(242, 242, 242);
 	background-color: rgb(67, 96, 199);
